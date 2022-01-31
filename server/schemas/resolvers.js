@@ -13,7 +13,7 @@ const resolvers = {
     },
 
     Mutation: {
-        addUser: async (parents, args) => {
+        addUser: async (parent, args, context) => {
             const user = await User.create(args);
             const token = signToken(user);
 
@@ -37,5 +37,27 @@ const resolvers = {
             return { token, user };
         },
         //save book mutation
-    }
-}
+        saveBook: async (parent, { bookData }, context) => {
+            if (context.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $push: { savedBooks: bookData } },
+                    { new: true }
+                );
+                return updatedUser;
+            } throw new AuthenticationError("You have to log in!")
+        },
+
+        deleteBook: async (parent, { bookId }, context) => {
+            if (context.user) {
+                const updatedUser = await User.findOneAndDelete(
+                    { _id: context.user.id },
+                    { $pull: { savedBooks: { bookId: bookId } } }
+                );
+                return updatedUser
+            }
+        },
+    },
+};
+
+module.exports = resolvers
