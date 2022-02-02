@@ -4,6 +4,7 @@ import { Jumbotron, Container, Col, Form, Button, Card, CardColumns } from 'reac
 import Auth from '../utils/auth';
 import { saveBook, searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
+//import { useQuery } from '@apollo/client';
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -19,6 +20,14 @@ const SearchBooks = () => {
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
   });
+
+  // Instead, use the useQuery() Hook to execute the GET_ME query on load and save it to a variable named userData.
+
+  //  const {loading, error, data} = useQuery(GET_ME);
+  //  if (loading) return 'Loading...';
+  //  if (error) return `Error! ${error.message}`;
+
+
 
   // create method to search for books and set state on form submit
   const handleFormSubmit = async (event) => {
